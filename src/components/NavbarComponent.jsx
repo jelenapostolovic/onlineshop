@@ -1,6 +1,6 @@
 import React from 'react'
 import { CiUser, CiHeart, CiShoppingCart } from "react-icons/ci";
-
+import { SignedIn, SignedOut, SignInButton, UserButton} from '@clerk/clerk-react';
 function NavbarComponent() {
   return (
     <div className='bg-mainBlue h-full lg:h-[100px] flex items-center py-[10px]'>
@@ -16,7 +16,12 @@ function NavbarComponent() {
             <div className='flex items-center gap-[10px]'>
                 <div className='flex items-center gap-[5px]'>
                     <CiUser color='white'size={25}/>
-                    <span className='text-textWhite text-[18px]'>Login</span>
+                    <SignedOut>
+                        <SignInButton />
+                    </SignedOut>
+                    <SignedIn>
+                        <UserButton />
+                    </SignedIn>
                 </div>
                 <div className='flex items-center gap-[5px]'>
                     <CiHeart color='white' size={25}/>
