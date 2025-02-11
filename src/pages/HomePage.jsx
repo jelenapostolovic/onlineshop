@@ -17,11 +17,16 @@ function HomePage() {
   }, [])
 
   return (
-    <div>{isLoading ? <div>
+    <div className='container mx-auto'>
+      <div>
+        <span>list grid wiev</span>
+      </div>
+      {isLoading ? (
+        <div className='flex flex-wrap items-center justify-center gap-[10px]'>
       {allProducts.map((product)=> {
         return <CardComponent key={product.id} product={product}/>
       })}
-    </div> : <div>Loading..</div>}</div>
+    </div> ): ( <div>Loading..</div> )}</div>
   )
 }
 

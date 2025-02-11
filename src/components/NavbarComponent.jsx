@@ -1,12 +1,17 @@
 import React from 'react'
 import { CiUser, CiHeart, CiShoppingCart } from "react-icons/ci";
 import { SignedIn, SignedOut, SignInButton, UserButton} from '@clerk/clerk-react';
+import logo from '../assets/logo.png';
+import { Link } from 'react-router-dom';
+
 function NavbarComponent() {
   return (
     <div className='bg-mainBlue h-full lg:h-[100px] flex items-center py-[10px]'>
         <div className="container mx-auto flex justify-between 
         items-center flex-col lg:flex-row gap-[10px]">
-            nav
+        <Link to='/'>   
+            <img src={logo} alt='logo-image'/>
+        </Link>     
             <div className='bg-textWhite rounded-[20px]'>
                 <input type="text" placeholder='Search..' className='bg-transparent outline-none px-[20px] py-[10px] 
                 rounded-[20px] placeholder:text-mainYellow text-mainBlue'/>

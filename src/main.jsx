@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
+import SingleProductPage from './pages/SingleProductPage.jsx'
 import { Provider } from 'react-redux'
 import store from './store/store.js'
 import { ClerkProvider } from '@clerk/clerk-react'
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
         {
           path: '/',
           element: <HomePage/>
+        },
+        {
+          path: '/singleProduct/:id',
+          element: <SingleProductPage/>
         }
       ]
 }])
