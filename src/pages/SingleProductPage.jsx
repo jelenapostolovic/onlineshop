@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ProductService from '../services/ProductService';
 import { Rating } from '@mui/material';
 import { FaCheck } from "react-icons/fa6";
 import { RxCross1 } from "react-icons/rx";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { FaShippingFast } from "react-icons/fa";
+import { useDispatch } from 'react-redux';
+import { saveInCartAction } from '../store/cartSlice';
 
 function SingleProductPage() {
   const [singleProduct, setSingleProduct] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [countProduct, setCountProduct] = useState(1);
+  const dispatch = useDispatch();
   let {id} = useParams();
+
+
   useEffect(() => {
     ProductService.getSingleProduct(id)
     .then((res) => {
@@ -24,6 +29,11 @@ function SingleProductPage() {
 
   function handleImage(index) {
     setCurrentImage(index);
+  }
+
+  //fja koja prosledjuje single product u cart na klik
+  function handleProductCart() {
+      dispatch(saveInCartAction(singleProduct))
   }
    
   return (
@@ -100,7 +110,8 @@ function SingleProductPage() {
   
             {/* Dodavanje u korpu */}
             <div className="flex items-center mt-[30px] gap-[20px]">
-              <button className='bg-mainYellow text-textWhite px-[26px] py-[12px] rounded-lg'>Add To Cart</button>
+              <Link to={'/cart'} className='bg-mainYellow text-textWhite
+               px-[26px] py-[12px] rounded-lg' onClick={handleProductCart}>Add To Cart</Link>
               <div className='bg-[#EEE] p-[10px] rounded-full'>
                 <IoIosHeartEmpty size={30}/>
               </div>

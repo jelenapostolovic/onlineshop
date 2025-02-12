@@ -5,6 +5,7 @@ import App from './App.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
 import SingleProductPage from './pages/SingleProductPage.jsx'
+import CartPage from './pages/CartPage.jsx'
 import { Provider } from 'react-redux'
 import store from './store/store.js'
 import { ClerkProvider } from '@clerk/clerk-react'
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
         {
           path: '/singleProduct/:id',
           element: <SingleProductPage/>
+        },
+        {
+          path: '/cart',
+          element: <CartPage/>
         }
       ]
 }])

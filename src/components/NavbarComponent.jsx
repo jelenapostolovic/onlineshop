@@ -1,10 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { CiUser, CiHeart, CiShoppingCart } from "react-icons/ci";
 import { SignedIn, SignedOut, SignInButton, UserButton} from '@clerk/clerk-react';
 import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function NavbarComponent() {
+
+    const [totalProductLS, setTotalProductLS] = useState(0);
+    // let totalProduct = JSON.parse(localStorage.getItem('cart_total'));
+    const {totalProduct} = useSelector((state) => state.cartStore)
+
+    useEffect(() => {
+        let lsTotal = JSON.parse(localStorage.getItem('cart_total'));
+        if(lsTotal){
+            setTotalProductLS(lsTotal);
+        }
+    }, [totalProduct]);
+    
+
   return (
     <div className='bg-mainBlue h-full lg:h-[100px] flex items-center py-[10px]'>
         <div className="container mx-auto flex justify-between 
@@ -39,8 +53,8 @@ function NavbarComponent() {
                     <CiShoppingCart color='white' size={25}/>
                     <span className='bg-mainYellow text-textWhite
                      rounded-full w-[20px] h-[20px] 
-                     flex items-center justify-center'>0</span>
-                    <span className='text-textWhite text-[18px]'>Cart</span>
+                     flex items-center justify-center'>{totalProductLS}</span>
+                    <Link to='/cart' className='text-textWhite text-[18px]'>Cart</Link>
                 </div>
             </div>
         </div>
