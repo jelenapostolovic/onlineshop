@@ -6,14 +6,17 @@ import { FaCheck } from "react-icons/fa6";
 import { RxCross1 } from "react-icons/rx";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { FaShippingFast } from "react-icons/fa";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { saveInCartAction } from '../store/cartSlice';
+import { updateFavoriteAction } from '../store/favoriteSlice';
 
 function SingleProductPage() {
   const [singleProduct, setSingleProduct] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [countProduct, setCountProduct] = useState(1);
+  const [favoriteIdIcon, setFavoriteIdIcon] = useState(null);
+  const {allFavorite} = useSelector((state) => state.favoriteStore);
   const dispatch = useDispatch();
   let {id} = useParams();
 
@@ -26,6 +29,20 @@ function SingleProductPage() {
     })
     .catch((err) => console.log(err))
   }, [])
+
+  useEffect(() => {
+    if(allFavorite.length >0){
+      allFavorite.find((item) => {
+        if(item.id === singleProduct.id){
+          setFavoriteIdIcon(item.id);
+          return;
+        }
+      })
+  
+  }else {
+    setFavoriteIdIcon(null);
+  }
+}, [allFavorite]);
 
   function handleImage(index) {
     setCurrentImage(index);
@@ -113,7 +130,10 @@ function SingleProductPage() {
               <Link to={'/cart'} className='bg-mainYellow text-textWhite
                px-[26px] py-[12px] rounded-lg' onClick={handleProductCart}>Add To Cart</Link>
               <div className='bg-[#EEE] p-[10px] rounded-full'>
-                <IoIosHeartEmpty size={30}/>
+                {favoriteIdIcon === parseInt(id) ? <IoIosHeartEmpty color='red' 
+                size={30} onClick={() => dispatch(updateFavoriteAction(singleProduct))}/>
+                 : <IoIosHeartEmpty size={30} 
+                 onClick={() => dispatch(updateFavoriteAction(singleProduct))}/> }
               </div>
             </div>
             <hr className='my-[20px]'/>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,11 +6,25 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteFromCartAction, setPriceHandlerAction } from '../store/cartSlice';
 
 function CartPage() {
-  let cart = JSON.parse(localStorage.getItem('cart_item'));
+  const [cartData,setCartData] = useState([]);
+  //setujemo ukupno cenu u korpi za sve proizvode ukupno
+  const {cart, totalPrice} = useSelector(state => state.cartStore);
+  // let cart = JSON.parse(localStorage.getItem('cart_item'));
   // const {cart} = useSelector(state => state.cartStore)
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    setCartData(JSON.parse(localStorage.getItem('cart_item')));
+  }, [cart])
+
+  function handleRemoveProduct(product) {
+      dispatch(deleteFromCartAction(product));
+  }
+
   return (
     <div className='mt-[50px]'>
       <div className='container mx-auto flex flex-col lg:flex-row gap-[20px]'>
@@ -26,7 +40,7 @@ function CartPage() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {cart.map((product) => (
+          {cartData.map((product, index) => (
             <TableRow
               key={product.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -38,14 +52,14 @@ function CartPage() {
               <TableCell align="left">{product.price}</TableCell>
               <TableCell align="left">
                 <div className='flex items-center'>
-                  <button className='px-[8px] py-[4px] bg-slate-300 text-[18px]'>-</button>
+                  <button className='px-[8px] py-[4px] bg-slate-300 text-[18px]' onClick ={()=> dispatch(setPriceHandlerAction({index, increment: -1}))}>-</button>
                   <span className='px-[8px] py-[4px] bg-slate-300 text-[18px]'>{product.count}</span>
-                  <button className='px-[8px] py-[4px] bg-slate-300 text-[18px]'>+</button>
+                  <button className='px-[8px] py-[4px] bg-slate-300 text-[18px]' onClick ={()=> dispatch(setPriceHandlerAction({index, increment: 1}))}>+</button>
                 </div>
               </TableCell>
               <TableCell align="right">${product.cartTotal}</TableCell>
               <TableCell align="right">
-                <button className='text-red-400'>Remove</button>
+                <button className='text-red-400' onClick={() => handleRemoveProduct(product)}>Remove</button>
               </TableCell>
             </TableRow>
           ))}
@@ -55,6 +69,7 @@ function CartPage() {
 
     <div className='w-full lg:w-[30%]'>
       <h2>cart total</h2>
+      <span>{totalPrice}</span>
     </div>
       </div>
     </div>
