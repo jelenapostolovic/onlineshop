@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import CategoryService from '../services/CategoryService'
 import { useDispatch, useSelector } from 'react-redux'
 import { saveAllCategoryAction } from '../store/categorySlice';
+import { saveSelectCategoryAction } from '../store/productSlice';
 
 function CategoryComponent() {
     // const[allCategory, setAllCategory]=useState([]);
@@ -34,12 +35,19 @@ function CategoryComponent() {
         {isLoading ? (
             <ul className='grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-5 
             lg:grid-cols-3 xl-grid-cols-4 gap-[5px]'>
-                {toggleCategory && allCategory.map((cat, index) => {
+                {toggleCategory && <>
+                    <li onClick={() => dispatch(saveSelectCategoryAction(''))} className='w-[200px] bg-mainBlue
+                     text-textWhite 
+                    text-center rounded-lg px-[16px] py-[8px]
+                    hover:bg-mainYellow transition-all duration-500 cursor-pointer'>All Category</li>   
+                {allCategory.map((cat, index) => {
                     return <li key={index} className='w-[200px] bg-mainBlue
                      text-textWhite 
                     text-center rounded-lg px-[16px] py-[8px]
-                    hover:bg-mainYellow transition-all duration-500 cursor-pointer'>{cat}</li>
-                })}
+                    hover:bg-mainYellow transition-all duration-500 cursor-pointer'
+                    onClick={() => dispatch(saveSelectCategoryAction(cat))}
+                    >{cat}</li>
+                })}</>}
             </ul>
         ) : (<div>Loading Category</div>)}
     </div>

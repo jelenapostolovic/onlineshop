@@ -3,7 +3,8 @@ import { CiUser, CiHeart, CiShoppingCart } from "react-icons/ci";
 import { SignedIn, SignedOut, SignInButton, UserButton} from '@clerk/clerk-react';
 import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveSearchProductAction } from '../store/productSlice';
 
 function NavbarComponent() {
 
@@ -11,6 +12,8 @@ function NavbarComponent() {
     // let totalProduct = JSON.parse(localStorage.getItem('cart_total'));
     const {totalProduct} = useSelector((state) => state.cartStore)
     const {favoriteTotal} = useSelector((state) => state.favoriteStore)
+    const [searchProducts, setSearchProducts] = useState('');
+    const dispatch = useDispatch();
 
     useEffect(() => {
         let lsTotal = JSON.parse(localStorage.getItem('cart_total'));
@@ -20,6 +23,11 @@ function NavbarComponent() {
             setTotalProductLS(0);
         }
     }, [totalProduct]);
+
+    function handleSearchProducts() {
+        dispatch(saveSearchProductAction(searchProducts));
+        setSearchProducts('');
+    }
     
 
   return (
@@ -31,8 +39,12 @@ function NavbarComponent() {
         </Link>     
             <div className='bg-textWhite rounded-[20px]'>
                 <input type="text" placeholder='Search..' className='bg-transparent outline-none px-[20px] py-[10px] 
-                rounded-[20px] placeholder:text-mainYellow text-mainBlue'/>
-                <button className='bg-mainYellow text-textWhite px-[20px] py-[10px] rounded-[20px]'>Search</button>
+                rounded-[20px] placeholder:text-mainYellow text-mainBlue'
+                value={searchProducts}
+                onChange={(e) => setSearchProducts(e.target.value)}/>
+                <button 
+                className='bg-mainYellow text-textWhite px-[20px] 
+                py-[10px] rounded-[20px]' onClick={handleSearchProducts}>Search</button>
             </div>
 
             <div className='flex items-center gap-[10px]'>

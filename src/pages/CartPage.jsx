@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,11 +11,13 @@ import { deleteFromCartAction, setPriceHandlerAction } from '../store/cartSlice'
 
 function CartPage() {
   const [cartData,setCartData] = useState([]);
+  const [activeCoupon, setActiveCoupon] = useState('');
   //setujemo ukupno cenu u korpi za sve proizvode ukupno
   const {cart, totalPrice} = useSelector(state => state.cartStore);
   // let cart = JSON.parse(localStorage.getItem('cart_item'));
   // const {cart} = useSelector(state => state.cartStore)
   const dispatch = useDispatch();
+  const couponRef = useRef();
 
   useEffect(()=>{
     setCartData(JSON.parse(localStorage.getItem('cart_item')));
@@ -23,6 +25,12 @@ function CartPage() {
 
   function handleRemoveProduct(product) {
       dispatch(deleteFromCartAction(product));
+  }
+
+  function handleApplyCoupon() {
+    setActiveCoupon(couponRef.current.value);
+
+    couponRef.current.value = '';
   }
 
   return (
@@ -68,8 +76,27 @@ function CartPage() {
     </TableContainer>
 
     <div className='w-full lg:w-[30%]'>
-      <h2>cart total</h2>
-      <span>{totalPrice}</span>
+      <h2 className='text-textWhite bg-mainBlue py-[20px] text-center rounded-md'>Cart Total</h2>
+      <span className='text-center text-[20px] font-extraBold'>Total Price: ${activeCoupon === 'react' ? totalPrice/2 : totalPrice}</span>
+
+      <div className='flex flex-col gap-[20px]'>
+        <input
+        ref={couponRef}
+        type='text' 
+        placeholder='Insert coupon' 
+        className='p-[10px] border border-grayColor 
+        rounded-lg placeholder:text-mainBlue outline-none mt-[25px]'
+        // value={activeCoupon}
+        // onChange={(e) =>setActiveCoupon(e.target.value)}
+        />
+        <span className='text-[13px] text-grayColor'>Insert coupon for 50% discount</span>
+        <button className={activeCoupon === 'react' ? 'bg-grayColor  px-[15px] text-black py-[7px] rounded-lg transition-all duration-300 cursor-pointer line-through' : 
+        'bg-mainBlue hover:bg-mainYellow px-[15px] text-white py-[7px] rounded-lg transition-all duration-300 cursor-pointer'
+      }
+        onClick={handleApplyCoupon}
+        disabled={activeCoupon === 'react' ? true : false}
+        >{activeCoupon === 'react' ? 'Coupon applied' : 'Apply coupon'}</button>
+      </div>
     </div>
       </div>
     </div>

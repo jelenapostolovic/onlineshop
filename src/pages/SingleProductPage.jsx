@@ -62,7 +62,7 @@ function SingleProductPage() {
             {/* Glavna slika */}
             <img src={singleProduct.images[currentImage]} alt="Product" className='max-h-[400px]' />
             {/* Thumbnails */}
-            <div className="flex items-center justify-center gap-[20px]">
+            <div className="flex items-center justify-center gap-[20px] flex-wrap">
               {singleProduct.images.map((el, index) => (
                 <img
                   src={el}
