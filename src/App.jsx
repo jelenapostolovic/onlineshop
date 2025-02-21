@@ -14,9 +14,9 @@ function App() {
 const [activeHeader, setActiveHeader] = useState(true);
   return (
     <>
+      {activeHeader && <HeaderComponent setActiveHeader= {setActiveHeader} />}
+      <NavbarComponent/>
       <div>
-        {activeHeader && <HeaderComponent setActiveHeader= {setActiveHeader} />}
-        <NavbarComponent/>
         <CategoryComponent/>
         <Outlet/>
       </div>
